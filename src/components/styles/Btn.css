@@ -1,0 +1,4 @@
+.btn {
+    composes: btn, btn-primary, not-rounded from global;
+    transition: all 0.2s ease;
+}
