@@ -1,13 +1,24 @@
 import { h } from 'preact';
 import Btn from './Btn';
 
-const Counter = props => (
+const Counter = ({ num, increment }) => (
     <div>
-        <h2>{props.num}</h2>
+        <h2 className="counter-number">{num}</h2>
 
-        <div className="center">
-            <Btn onClick={props.increment}>Increment</Btn>
-            <Btn onClick={props.decrement}>Decrement</Btn>
+        <div className="counter-controls">
+            <Btn
+                className="increment-btn"
+                onClick={() => increment(1)}
+            >
+                Increment
+            </Btn>
+
+            <Btn
+                className="decrement-btn"
+                onClick={() => increment(-1)}
+            >
+                Decrement
+            </Btn>
         </div>
     </div>
 );
