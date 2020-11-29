@@ -1,6 +1,12 @@
+const fixture = require('../../fixtures/sfn.json');
+
 context('Steam Friend Night Frontpage', () => {
     beforeEach(() => {
-        cy.visit('https://sfn.now.sh')
+        // get url from fixture
+        cy.visit(fixture.baseUrl);
+
+        // alias requests that are made
+        cy.intercept('https://sfn-server.herokuapp.com/user/getAllProfiles/**').as('getAllProfiles')
     })
 
     it('check button is disabled when input is empty', () => {
@@ -29,12 +35,14 @@ context('Steam Friend Night Frontpage', () => {
             .click()
 
         cy.get('.alert-container')
-            .contains('getting profiles')
+            .should('contain', 'getting profiles')
 
-        cy.wait(3000) // wait for response
+        cy.wait('@getAllProfiles').then(interception => {
+            cy.get('.alert-container')
+                .should('contain', 'error: could not retrieve profiles')
+        }) // wait for response
 
-        cy.get('.alert-container')
-            .contains('error: could not retrieve profiles')
+
     })
 
     it('enter key on user input', () => {
@@ -43,8 +51,9 @@ context('Steam Friend Night Frontpage', () => {
             .type('yet_another_fake_user')
             .type('{enter}')
 
-        cy.wait(3000)
-        cy.get('.alert-container')
-            .contains('error: could not retrieve profiles')
+        cy.wait('@getAllProfiles').then(interception => {
+            cy.get('.alert-container')
+                .should('contain', 'error: could not retrieve profiles')
+        }) // wait for response
     })
 });
