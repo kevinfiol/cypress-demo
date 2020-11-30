@@ -49,6 +49,10 @@ context('Steam Friend Night Friends', () => {
             .should('be.disabled')
 
         cy.get('.friends-staged')
+            .find('button')
+            .should('be.disabled')
+
+        cy.get('.friends-staged')
             .find('input')
             .type('bread')
 
